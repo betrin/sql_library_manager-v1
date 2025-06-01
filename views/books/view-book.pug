@@ -1,13 +1,14 @@
 extends ../layout
 
 block content
-  h2= book.title
+  h1= book.title
   p Author: #{book.author}
   p Genre: #{book.genre}
   p Year: #{book.year}
   
-  div
+  div.btn-row.center
     a.button(href='/books/' + book.id + '/edit') Edit Book
     a.button(href='/books/' + book.id + '/delete') Delete Book
     a.button(href='/books') Back to Books
   
+

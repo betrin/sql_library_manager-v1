@@ -1,0 +1,37 @@
+
+block scripts
+  script.
+    const searchInput = document.getElementById('search-input');
+    const booksTableBody = document.getElementById('books-table-body');
+    let searchTimeout;
+
+    searchInput.addEventListener('input', function(e) {
+      clearTimeout(searchTimeout);
+      const searchTerm = e.target.value;
+
+      //- Runnign search every 300ms to not overload
+      searchTimeout = setTimeout(() => { 
+        fetch(`/books?search=${encodeURIComponent(searchTerm)}`)
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTableBody = doc.getElementById('books-table-body');
+            const newPagination = doc.querySelector('.pagination');
+            booksTableBody.innerHTML = newTableBody.innerHTML;
+            
+            // Update pagination if it exists
+            const currentPagination = document.querySelector('.pagination');
+            if (newPagination) {
+              if (currentPagination) {
+                currentPagination.innerHTML = newPagination.innerHTML;
+              } else {
+                document.querySelector('table').after(newPagination);
+              }
+            } else if (currentPagination) {
+              currentPagination.remove();
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      }, 300);
+    });

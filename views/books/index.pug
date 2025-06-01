@@ -1,7 +1,12 @@
 extends ../layout
 
 block content
-  h2= title
+  h1= title
+  p
+    a.button(href="/books/new") Create New Book
+  
+  include ../books/search
+    
   table
     thead
       tr
@@ -9,7 +14,7 @@ block content
         th Author
         th Genre
         th Year
-    tbody
+    tbody#books-table-body
       if books.length
         each book in books
           tr
@@ -21,3 +26,12 @@ block content
       else
         tr
           td(colspan="4") No books found.
+  // Pagination
+  if pagination.totalPages > 1
+    span.page-info Page #{pagination.currentPage} of #{pagination.totalPages}
+    .pagination
+      a.button(class=pagination.currentPage === 1 ? 'disabled' : '' href=pagination.currentPage === 1 ? '#' : `/books?page=${pagination.previousPage}${search ? `&search=${search}` : ''}`) Prev
+      a.button(class=pagination.currentPage === pagination.totalPages ? 'disabled' : '' href=pagination.currentPage === pagination.totalPages ? '#' : `/books?page=${pagination.nextPage}${search ? `&search=${search}` : ''}`) Next
+  
+  // Search Script stored here
+  include ../scripts/script

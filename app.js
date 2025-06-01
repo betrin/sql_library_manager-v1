@@ -29,13 +29,26 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  console.log('Error:', err.message, 'Status:', err.status); // Add logging
+  
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  
+  if (err.status === 400) {
+    // For invalid page numbers and other client errors
+    return res.render('books/errors', { 
+      errors: [{ message: err.message }],
+      title: 'Error'
+    });
+  } else if (err.status === 404) {
+    return res.render('page-not-found', { title: 'Page Not Found' });
+  } else {
+    return res.render('error');
+  }
 });
 
 module.exports = app;

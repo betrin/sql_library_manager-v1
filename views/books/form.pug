@@ -1,16 +1,15 @@
-div
+p
   label(for="title") Title:
-  input(type="text", name="title" value=book.title)
-div
+    input#title(type="text", name="title" value=book.title)
+p
   label(for="author") Author:
-  input(type="text", name="author" value=book.author)
-div
+    input#author(type="text", name="author" value=book.author)
+p
   label(for="genre") Genre:
-  input(type="text", name="genre" value=book.genre)
-div
+    input#genre(type="text", name="genre" value=book.genre)
+p
   label(for="year") Year:
-  input(type="text", name="year" value=book.year)
-//- div
-//-   label(for="body") Body:
-//-   textarea(name="body")= book.body
-input(type="submit")
+    input#year(type="number", name="year" value=book.year max=new Date().getFullYear())
+div.btn-row.center
+  input.button(type="submit")
+  a.button(href="/books") Cancel
